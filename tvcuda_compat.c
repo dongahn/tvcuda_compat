@@ -7,9 +7,9 @@
  * This W/R should be undone when RWS and NVIDIA put in a permanent fix.
  *
  * Control:
- *     If the application calls threaded init (e.g., MPI_Init_thread ()), 
+ *     If the application calls threaded init (e.g., MPI_Init_thread ()),
  *     users must set TVCUDA_COMPAT_MPI_INIT_THREAD environment variable
- *     to the required MPI thread support level:  
+ *     to the required MPI thread support level:
  *         TVCUDA_COMPAT_MPI_INIT_THREAD=SINGLE
  *         TVCUDA_COMPAT_MPI_INIT_THREAD=FUNNELED
  *         TVCUDA_COMPAT_MPI_INIT_THREAD=SERIALIZED
@@ -17,7 +17,7 @@
  */
 
 #define _GNU_SOURCE 1
-#define DEBUG 1
+#define DEBUG 0
 #include <mpi.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -117,7 +117,7 @@ static int core_mpi_init_thread (int *argc, char ***argv, int required,
 
     if (fortran_init_thread && !is_init_called) {
         is_init_called = 1;
-  
+
         switch (fortran_init_thread) {
         case 1:
             PMPI_INIT_THREAD (&required, provided, &rc);
@@ -148,7 +148,7 @@ static void MPI_Init_fortran_wrapper (MPI_Fint *ierr, int argv_len)
     char **argv = NULL;
 
 #if DEBUG
-    fprintf (stdout, "F Wrapper for TV/CUDA workaround  start\n");    
+    fprintf (stdout, "F Wrapper for TV/CUDA workaround  start\n");
 #endif
 
     // NOOP
@@ -171,7 +171,7 @@ static void MPI_Init_thread_fortran_wrapper (MPI_Fint *required,
     char **argv = NULL;
 
 #if DEBUG
-    fprintf (stdout, "F Wrapper for TV/CUDA workaround  start\n");    
+    fprintf (stdout, "F Wrapper for TV/CUDA workaround  start\n");
 #endif
 
     // NOOP
@@ -264,22 +264,22 @@ int MPI_Init (int *argc, char ***argv)
 }
 
 int MPI_Init_thread (int *argc, char ***argv, int required, int *provided)
-{ 
+{
     int rc = 0;
 
 #if DEBUG
-    fprintf (stdout, "C/C++ Wrapper for MPI_Init_thread start\n");    
+    fprintf (stdout, "C/C++ Wrapper for MPI_Init_thread start\n");
 #endif
 
     *provided = thread_support;
 
-    // NOOP 
+    // NOOP
     // rc = core_mpi_init_thread (argc, argv, required, provided,
     //                            fortran_init_thread);
     // call_cudbgApiAttach ();
 
 #if DEBUG
-    fprintf (stdout, "C/C++ Wrapper for MPI_Init_thread end\n");    
+    fprintf (stdout, "C/C++ Wrapper for MPI_Init_thread end\n");
 #endif
     return rc;
 }
@@ -302,14 +302,14 @@ void mpi_init (MPI_Fint *ierr, int argv_len)
 }
 
 void mpi_init_ (MPI_Fint *ierr, int argv_len)
-{ 
+{
     fortran_init = 3;
     MPI_Init_fortran_wrapper(ierr, argv_len);
 }
 
 void mpi_init__ (MPI_Fint *ierr, int argv_len)
 {
-    fortran_init = 4; 
+    fortran_init = 4;
     MPI_Init_fortran_wrapper(ierr, argv_len);
 }
 
