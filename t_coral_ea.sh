@@ -8,7 +8,7 @@ base_dir=`ap ${base_dir}`
 . ./sharness.sh
 
 run_job () {
-    mpirun -np 40 ${base_dir}/$1
+    mpirun -np 4 ${base_dir}/$1
     return $?
 }
 
